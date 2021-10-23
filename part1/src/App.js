@@ -1,68 +1,77 @@
 import React, { useState } from 'react'
 
-const Header = (props) => <div><h1>{props.head}</h1></div>
+const anecdoteGenerator = (len, setSelected) => {   //len = props
+  let randNum =  Math.floor(Math.random()*len)
 
-const Button = (props) => {
-  return(
-    <span>
-      <button onClick={() => props.setter(props.stat+1)}>{props.text}</button>
-    </span>
-  )
+  setSelected(randNum)
 }
 
-const StatisticLine = (props) => {
-  return(
-    <tr>
-      <td>{props.text}</td> 
-      <td>{props.value}</td>
-    </tr>
-  )
+const vote = (votes, selected, setVotes) => {
+  const newVotes = [...votes]
+  newVotes[selected] += 1
+
+  setVotes(newVotes)
 }
 
-const Stats = ({good, neutral, bad}) => {   //{good,netural,bad} = props
+const MostVotes = ({votes, anecdotes}) => {
+  const maxVotes = {count:0, index:0}
 
-  if(good===0 && neutral===0 && bad===0)
+  for(let i=0; i<votes.length; i++)
   {
-    return(
-      <div>
-        <b>No feedback gathered</b>
-      </div>
-    )
-  } else {
-    return(
-      <div>
-        <StatisticLine text="good" value={good}/>
-        <StatisticLine text="neutral" value={neutral}/>
-        <StatisticLine text="bad" value={bad}/>
-        <StatisticLine text="all" value={good+neutral+bad}  />
-        <StatisticLine text="average" value={(good-bad)/  (good+neutral+bad)}/>
-        <StatisticLine text="positive" value={good/(good  +neutral+bad) * 100}/>
-      </div>
-    )
+    if(votes[i] > maxVotes.count)
+    {
+      maxVotes.count = votes[i]
+      maxVotes.index = i
+    }
   }
+
+  return(
+    <div>
+      Anecdote with most votes
+      <br/>
+      {anecdotes[maxVotes.index]}
+      <br/>
+      has {maxVotes.count} votes
+    </div>
+  )
 }
-
-
 
 const App = () => {
-  // save clicks of each button to its own state
-  const [good, setGood] = useState(0)
-  const [neutral, setNeutral] = useState(0)
-  const [bad, setBad] = useState(0)
+  const anecdotes = [
+    'If it hurts, do it more often',
+    'Adding manpower to a late software project makes it later!',
+    'The first 90 percent of the code accounts for the first 10 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
+    'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
+    'Premature optimization is the root of all evil.',
+    'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.',
+    'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients'
+  ]
+   
+  const [selected, setSelected] = useState(0)
+  const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0))
+
+  // const ary = new Array(anecdotes.length).fill(0)
 
   return (
     <div>
-      <Header head="give feedback" />
+      {anecdotes[selected]}
+      <br/>
 
-      <Button stat={good} setter={setGood} text="good"/>
-      <Button stat={neutral} setter={setNeutral} text="neutral"/>
-      <Button stat={bad} setter={setBad} text="bad"/>
+      has {votes[selected]} votes
+      <br/>
 
-      <Header head="Stats" />
+      <button onClick={() => {anecdoteGenerator(anecdotes.length, setSelected)}}>next Anecdotes</button>
 
-      <Stats good={good} bad={bad} neutral={neutral}/>
+      <button onClick={() => {vote(votes, selected, setVotes)}}>vote</button>
+      <br/><br/>
 
-    </div>
+      <MostVotes votes={votes} anecdotes={anecdotes}/>
+      {/* Anecdote with most votes
+      <br/>
+      {anecdotes[maxVotes.index]}
+      <br/>
+      has {maxVotes.count} votes*/}
+      </div> 
   )
 }
 
