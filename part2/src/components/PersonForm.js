@@ -9,7 +9,7 @@ const PersonForm = (props) => {
     const phonebookObject = {
       name: props.newName,
       number: props.newNumber,
-      id: props.persons.length+1
+      id: props.persons[props.persons.length-1].id+1
     }
 
     const matchedObject = props.persons.find(person => person.name===props.newName)
@@ -29,6 +29,15 @@ const PersonForm = (props) => {
           .then(response => {
             props.setPersons(props.persons.map(person => person.id !== updatedPhonebookObject.id ? person : response.data))
           })
+          .catch(error => {
+            props.setErrorMessage(
+              `The user ${updatedPhonebookObject.name} is already deleted`
+            )
+            setTimeout(() => {
+              props.setErrorMessage(null)
+            }, 5000)
+            props.setPersons(props.persons.filter(person => person.id !== updatedPhonebookObject.id))
+          })
       }
     } else {
       phonebookService
@@ -36,6 +45,12 @@ const PersonForm = (props) => {
         .then(response => {
           // console.log(response)
           props.setPersons(props.persons.concat (response.data)) //concat creates an object copy with changes
+          props.setErrorMessage(
+            `Added ${props.newName} to the phonebook`
+          )
+          setTimeout(() => {
+            props.setErrorMessage(null)
+          }, 5000)
       })
     }
 

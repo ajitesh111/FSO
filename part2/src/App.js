@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import PersonForm from './components/PersonForm.js'
 import Persons from './components/Persons.js'
 import Filter from './components/Filter.js'
+import Notification from './components/Notification.js'
 import phonebookService from './services/phonebook'
 
 const App = () => {
@@ -10,6 +11,7 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ filter, setFilter] = useState('')
+  const [ errorMessage, setErrorMessage] = useState('')
 
   useEffect (() => {  //ran after component is rendered
     phonebookService
@@ -19,12 +21,14 @@ const App = () => {
 
   return (
     <div>
+      <Notification message={errorMessage}/>
+
       <h2>Phonebook</h2>
       
       <Filter filter={filter} setFilter={setFilter}/>
       <br/>
 
-      <PersonForm newName={newName} newNumber={newNumber} persons={persons} setNewName={setNewName} setNewNumber={setNewNumber} setPersons={setPersons}/>
+      <PersonForm newName={newName} newNumber={newNumber} persons={persons} setNewName={setNewName} setNewNumber={setNewNumber} setPersons={setPersons} setErrorMessage={setErrorMessage}/>
 
       <h2>Numbers</h2>
       <Persons persons={persons} filter={filter}/>
