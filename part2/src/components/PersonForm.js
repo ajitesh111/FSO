@@ -1,18 +1,68 @@
 import React from 'react'
 
+import phonebookService from 'A:/CODE/FullStackOpen/part2/src/services/phonebook'
+
 const PersonForm = (props) => {
+  const addName = (event) => {
+    event.preventDefault()    //to stop the page from reloading among other things
+
+    const phonebookObject = {
+      name: props.newName,
+      number: props.newNumber,
+      id: props.persons.length+1
+    }
+
+    const matchedObject = props.persons.find(person => person.name===props.newName)
+
+    if(matchedObject)
+    {
+      if(window.confirm(`${props.newName} is already added to phonebook, would you like to replace with new number?`))
+      {
+        const updatedPhonebookObject =  {
+          ...phonebookObject,
+          id: matchedObject.id,
+          number: props.newNumber
+        }
+
+        phonebookService
+          .replace(updatedPhonebookObject)
+          .then(response => {
+            props.setPersons(props.persons.map(person => person.id !== updatedPhonebookObject.id ? person : response.data))
+          })
+      }
+    } else {
+      phonebookService
+        .create(phonebookObject)
+        .then(response => {
+          // console.log(response)
+          props.setPersons(props.persons.concat (response.data)) //concat creates an object copy with changes
+      })
+    }
+
+    props.setNewNumber('')
+    props.setNewName('')
+    }
+
+    const handleNameChange = (event) => {
+      props.setNewName(event.target.value)
+    }
+  
+    const handleNumberChange = (event) => {
+      props.setNewNumber(event.target.value)
+    }
+
     return(
-      <form onSubmit={props.addName}>
+      <form onSubmit={addName}>
         <div>
           name: <input 
                   value={props.newName} 
-                  onChange={props.handleNameChange}
+                  onChange={handleNameChange}
                 />
         </div>
         <div>
           number: <input 
                   value={props.newNumber} 
-                  onChange={props.handleNumberChange}
+                  onChange={handleNumberChange}
                 />
         </div>
         <div>

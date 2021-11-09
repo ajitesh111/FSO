@@ -1,7 +1,23 @@
 import React from 'react'
 
-const Person = (props) => <p>{props.person.name} {props.person.number}</p>
+import phonebookService from 'A:/CODE/FullStackOpen/part2/src/services/phonebook'
 
+const deleteNumber = (person) => {
+  const handler = () => {
+    if(window.confirm(`Delete ${person.name}?`))
+      phonebookService.remove(person.id)
+  }
+  return handler
+}
+
+const Person = (props) => {
+  return(
+    <span>
+      <p>{props.person.name} {props.person.number}</p>
+      <button onClick={deleteNumber(props.person)}>delete</button>
+    </span>
+  )
+}
 const Persons = ({persons, filter}) => {
     if(filter === '')
     {
@@ -11,15 +27,16 @@ const Persons = ({persons, filter}) => {
             <Person key={person.id} person={person} />
           )}
         </div>
-      )} else {
-        const newPersons = persons.filter(person => person.name.toLowerCase().startsWith(filter.toLowerCase()))
+    )} else {
+        const newPersons = persons.filter(person => person.name.startsWith(filter.toLowerCase()))
   
         return(
           <div>
             {newPersons.map(person =>
-              <Person key={person.id} person={person}/>)}
+              <Person key={person.id} person={person}/>
+            )}
           </div>
-      )
+        )
     }
   }
 
