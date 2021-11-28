@@ -14,9 +14,18 @@ code {
     monospace;
 }
 
-.error {
+.success {
   color: black;
   background: green;
+  border-style: hidden;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.error {
+  color: black;
+  background: red;
   border-style: hidden;
   border-radius: 5px;
   padding: 10px;

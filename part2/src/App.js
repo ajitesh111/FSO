@@ -12,6 +12,7 @@ const App = () => {
   const [ newNumber, setNewNumber ] = useState('')
   const [ filter, setFilter] = useState('')
   const [ errorMessage, setErrorMessage] = useState('')
+  const [successMessage, setSuccessMessage] = useState('')
 
   useEffect (() => {  //ran after component is rendered
     phonebookService
@@ -21,17 +22,17 @@ const App = () => {
 
   return (
     <div>
-      <Notification message={errorMessage}/>
+      <Notification errorMessage={errorMessage} successMessage={successMessage}/>
 
       <h2>Phonebook</h2>
       
       <Filter filter={filter} setFilter={setFilter}/>
       <br/>
 
-      <PersonForm newName={newName} newNumber={newNumber} persons={persons} setNewName={setNewName} setNewNumber={setNewNumber} setPersons={setPersons} setErrorMessage={setErrorMessage}/>
+      <PersonForm newName={newName} newNumber={newNumber} persons={persons} setNewName={setNewName} setNewNumber={setNewNumber} setPersons={setPersons} setErrorMessage={setErrorMessage} setSuccessMessage={setSuccessMessage}/>
 
       <h2>Numbers</h2>
-      <Persons persons={persons} filter={filter}/>
+      <Persons persons={persons} filter={filter} />
       
     </div>
   )

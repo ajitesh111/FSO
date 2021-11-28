@@ -30,13 +30,12 @@ const PersonForm = (props) => {
             props.setPersons(props.persons.map(person => person.id !== updatedPhonebookObject.id ? person : response.data))
           })
           .catch(error => {
-            props.setErrorMessage(
-              `The user ${updatedPhonebookObject.name} is already deleted`
-            )
+            props.setErrorMessage(error.response.data)
             setTimeout(() => {
               props.setErrorMessage(null)
             }, 5000)
-            props.setPersons(props.persons.filter(person => person.id !== updatedPhonebookObject.id))
+
+            props.setPersons(props.persons)
           })
       }
     } else {
@@ -45,12 +44,18 @@ const PersonForm = (props) => {
         .then(response => {
           // console.log(response)
           props.setPersons(props.persons.concat (response.data)) //concat creates an object copy with changes
-          props.setErrorMessage(
+          props.setSuccessMessage(
             `Added ${props.newName} to the phonebook`
           )
           setTimeout(() => {
             props.setErrorMessage(null)
           }, 5000)
+      })
+      .catch(error => {
+        props.setErrorMessage(error.response.data)
+        setTimeout(() => {
+          props.setErrorMessage(null)
+        }, 5000)
       })
     }
 

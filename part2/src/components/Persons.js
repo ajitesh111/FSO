@@ -28,7 +28,7 @@ const Persons = ({persons, filter}) => {
           )}
         </div>
     )} else {
-        const newPersons = persons.filter(person => person.name.startsWith(filter.toLowerCase()))
+        const newPersons = persons.filter(person => person.name.toLowerCase().startsWith(filter.toLowerCase()))
   
         return(
           <div>
