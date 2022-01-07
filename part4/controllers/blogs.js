@@ -59,7 +59,7 @@ blogsRouter.put('/:id', async (request, response) => {
     const blog = {
       likes: body.likes
     }
-
+//{new: true} bcz of this will return blog after modifying instead of initial version of it
     const res = await Blog.findByIdAndUpdate(request.params.id, blog, {new: true})
     response.json(res)
 })
