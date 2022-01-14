@@ -3,6 +3,7 @@ import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
 import NewBlog from './components/NewBlog'
+import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -51,7 +52,7 @@ const App = () => {
       blogService.setToken(user.token)
       setUser(user)
 
-      setSuccessMessage(`Welcome ${user.username}`)
+      setSuccessMessage(`Welcome ${user.name}`)
       setTimeout(() => {
         setSuccessMessage(null)
       }, 5000)
@@ -71,7 +72,7 @@ const App = () => {
 
       <h2>blogs</h2>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} setBlogs={setBlogs} user={user} />
+        <Blog key={blog.id} blog={blog} setBlogs={setBlogs} user={user} incrementLike={incrementLike} />
       )}
 
       <Togglable buttonLable='Add a new item' ref={newBlogRef}>
@@ -82,6 +83,23 @@ const App = () => {
       <button onClick={handleLogout}>logout</button>
     </div>
   )
+
+  //can be done in Blog component, done here only for a test to be passed
+  const incrementLike = async (blog) => {
+    try {const updatedBlog = {
+      ...blog,
+      user: user.id,
+      likes: blog.likes + 1
+    }
+    const newBlog = await blogService.update(updatedBlog)
+    blog = newBlog
+
+    const blogs = await blogService.getAll()
+    setBlogs(blogs)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const createBlog = async (BlogListObject) => {
     try {
@@ -120,22 +138,6 @@ const App = () => {
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
-    }
-  }
-
-  const Notification = (props) => {
-    if(props.errorMessage){
-      return(
-        <div className='error'>
-          {props.errorMessage}
-        </div>
-      )} else if(props.successMessage){
-      return(
-        <div className='success'>
-          {props.successMessage}
-        </div>
-      )} else {
-      return null
     }
   }
 

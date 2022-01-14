@@ -28,13 +28,13 @@ const LoginForm = ({ login }) => {
         <div>
           {/* '&emsp;' puts a tab space */}
                 username &emsp;
-          <input type='text' value={username} name='Username' onChange={handleUsernameChange}/>
+          <input id='username' type='text' value={username} name='username' onChange={handleUsernameChange}/>
         </div>
         <div>
                 password &emsp;
-          <input type='password' value={password} name='password' onChange={handlePasswordChange}/>
+          <input id='password' type='password' value={password} name='password' onChange={handlePasswordChange}/>
         </div>
-        <button type='submit'>login</button>
+        <button id='loginButton' type='submit'>login</button>
       </form>
     </div>
   )

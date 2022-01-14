@@ -2,13 +2,13 @@ import React, { useState } from 'react'
 import blogService from '../services/blogs'
 // import Togglable from './Togglable'
 
-const Blog = ({ blog, setBlogs, user }) => {
+const Blog = ({ blog, setBlogs, user, incrementLike }) => {
   const [view, setView] = useState('view')
 
   const compactBlog = () => (
     <div>
       <b>{blog.title}</b> &emsp;
-      <button onClick={handleClick}>view</button>
+      <button id='view' onClick={handleClick}>view</button>
     </div>
   )
 
@@ -20,13 +20,15 @@ const Blog = ({ blog, setBlogs, user }) => {
       {blog.url}
       <br/>
       likes {blog.likes}
-      <button onClick={incrementLike}>like</button>
+      <button id='like' onClick={likeButton}>like</button>
       <br/>
       <em>{blog.author}</em>
       <br/>
-      {removeButtonIfUser()}
+      {showRemoveButtonIfUser()}
     </div>
   )
+
+  const likeButton = () => incrementLike(blog)
 
   const handleClick = () => {
     if(view === 'view')
@@ -35,23 +37,10 @@ const Blog = ({ blog, setBlogs, user }) => {
       setView('view')
   }
 
-  const incrementLike = async () => {
-    const updatedBlog = {
-      ...blog,
-      user: user.id,
-      likes: blog.likes + 1
-    }
-    const newBlog = await blogService.update(updatedBlog)
-    blog = newBlog
-
-    const blogs = await blogService.getAll()
-    setBlogs(blogs)
-  }
-
-  const removeButtonIfUser = () => {
-    if(user.username === blog.user.username)
+  const showRemoveButtonIfUser = () => {
+    if(user!==undefined && user.username === blog.user.username)
       return (
-        <button onClick={deleteBlog}>remove</button>
+        <button id='remove' onClick={deleteBlog}>remove</button>
       )
   }
 
@@ -73,7 +62,7 @@ const Blog = ({ blog, setBlogs, user }) => {
   }
 
   return (
-    <div style={blogStyle}>
+    <div style={blogStyle} className='blog'>
       {(view==='view') ? compactBlog() : DetailedBlog()}
     </div>
   )

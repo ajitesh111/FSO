@@ -39,18 +39,18 @@ const NewBlog = ({ createBlog }) => {
         <h2>Create a new bloglist entry</h2>
         <div>
                     Title: &emsp;
-          <input value={newTitle} onChange={handleTitleChange}/>
+          <input id='title' value={newTitle} onChange={handleTitleChange}/>
         </div>
         <div>
                     author: &ensp;
-          <input value={newAuthor} onChange={handleAuthorChange}/>
+          <input id='author' value={newAuthor} onChange={handleAuthorChange}/>
         </div>
         <div>
                     Url: &emsp;
-          <input value={newUrl} onChange={handleUrlChange} />
+          <input id='url' value={newUrl} onChange={handleUrlChange} />
         </div>
         <br/>
-        <button type='submit'>save</button>
+        <button id='save' type='submit'>save</button>
       </form>
     </div>
   )

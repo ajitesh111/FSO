@@ -1,3 +1,6 @@
+THIS PROJECT NEEDS BACKEND RUNNING, THE PRODUCTION BACKEND USED BY ME CAN BE FOUND IN './part4'
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
